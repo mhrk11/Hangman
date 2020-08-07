@@ -7,14 +7,16 @@
 
 using namespace std;
 
+const int MAX_TRIES = 5;
+
+
 int foundLetter(char, string, string&);
 void displayLine(int, char);
 void createmenu();
 void space();
 void howtoplay();
 void gap();
-
-
+void randomGuess(string, string&);
 
 int main()
 {
@@ -23,8 +25,11 @@ int main()
     createmenu();
     howtoplay();
     createmenu();
-
+//variables
+    char letter;
+    char ch;
     string word;
+    int guesses=0;
     string words[]=
     {
         "nepal",
@@ -35,10 +40,79 @@ int main()
         "china",
     };
 
+//random word assign
    int totalwords=sizeof(words)/sizeof(words[0]);
-   cout<<totalwords;
+   space();
+   word=words[rand()%totalwords];
+   space();
+
+   string unknown(word.length(), '*');
+
+//Guessing starts from here
+   randomGuess(word, unknown);
+do
+{
+
+gap();
+
+    cout<<"Word: "<<unknown<<endl;
+gap();
+
+    cout<<"Number of Lives left: "<<MAX_TRIES-guesses<<endl;
+gap();
 
 
+   cout<<"Guess a letter: "; cin >> letter;
+
+   if (foundLetter(letter, word, unknown)==0)
+   {
+        guesses++;
+        space();
+        gap();
+        cout<<"Try Again."<<endl;
+
+   }
+   else
+   {
+    space();
+    gap();
+
+    cout<<"Found a letter.";
+   }
+   space();
+
+
+   if (unknown==word)
+    {space();
+        gap();
+
+
+    cout<<"YOU WON.";
+        break;
+    }
+
+    cin.get(ch);
+    cin.ignore();
+    createmenu();
+    space();
+    space();
+
+
+} while(guesses < MAX_TRIES);
+
+if (guesses==5)
+{
+    space();
+    gap();
+    cout<<"You went out of lives..."<<endl;
+    space();
+    gap();
+
+    cout<<"The Word was: "<<word;
+
+    space();
+
+}
 
 
 }
@@ -56,7 +130,10 @@ int foundLetter(char guess, string word, string &guessword)
     {
         if (guess==guessword[i])
         {
-            cout<<"\n The letter already exists \n";
+            space();
+            gap();
+
+            cout<<"The letter already exists ";
             return 0;
         }
         if(guess==word[i])
@@ -119,3 +196,10 @@ void howtoplay()
 
 }
 
+
+void randomGuess(string word, string& unknownWord)
+{
+    int letter = rand()%(word.length());
+    unknownWord[letter]=word[letter];
+
+}
